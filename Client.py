@@ -5,7 +5,6 @@ import time
 def communicate_with_server():
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect(('127.0.0.1', 12345))
-
     n, m, l = np.random.randint(1000, 2000, size=3)
     matrix_a = np.random.randint(1, 10, size=(n, m))
     matrix_b = np.random.randint(1, 10, size=(m, l))
