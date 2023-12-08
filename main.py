@@ -3,7 +3,6 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
 
-
 def handle_client(client_socket):
     try:
         matrix_sizes = client_socket.recv(1024).decode().split(',')
