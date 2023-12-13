@@ -28,8 +28,7 @@ def handle_client(client_socket):
         print("Matrix B:")
         print(matrix_b)
 
-        # Perform matrix multiplication in a separate thread
-        with ThreadPoolExecutor(max_workers=1) as executor:
+        with ThreadPoolExecutor(max_workers=4) as executor:
             result_matrix = executor.submit(np.dot, matrix_a, matrix_b).result()
 
         print("[SERVER] Sending result matrix to client")
