@@ -2,6 +2,10 @@ import socket
 import threading
 from concurrent.futures import ThreadPoolExecutor
 import numpy as np
+
+def calculate_element(row, col, matrix_a, matrix_b, result_matrix):
+    result_matrix[row, col] = np.dot(matrix_a[row, :], matrix_b[:, col])
+
 def handle_client(client_socket):
     try:
         matrix_sizes = client_socket.recv(1024).decode().split(',')
@@ -27,9 +31,12 @@ def handle_client(client_socket):
         print("Matrix B:")
         print(matrix_b)
 
-        # Perform matrix multiplication in a separate thread
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            result_matrix = executor.submit(np.dot, matrix_a, matrix_b).result()
+        result_matrix = np.zeros((n, l), dtype=int)
+
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            for i in range(n):
+                for j in range(l):
+                    executor.submit(calculate_element, i, j, matrix_a, matrix_b, result_matrix)
 
         print("[SERVER] Sending result matrix to client")
         client_socket.send(result_matrix.tobytes())
